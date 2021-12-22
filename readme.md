@@ -16,6 +16,21 @@ C'mon! It is amazing!🤤
 
 ## Everything is in an SQLite database
 
+There is only a table called `divina_commedia`.
+
+Every entry is uniquely identified by the combination of `num_cantica`, `num_canto`, `num_verso`.
+
+Every `num_cantica`, `num_canto`, `num_verso` has a corresponding `TEXT` version.
+- `num_cantica`, goes from 1 to 3 and corresponds to one of *"Inferno" "Purgatorio" "Paradiso"* in `nome_cantica`
+- `num_canto`, goes from 1 to 34 for `num_cantica = 1` (aka "Inferno")
+
+
+
+	"nome_cantica" TEXT NULL,
+	"num_rom_canto" TEXT NULL,
+	"verso" TEXT NULL,
+	"num_terzina" INTEGER NULL,
+	PRIMARY KEY ("num_libro", "num_canto", "num_verso")
 
 
 

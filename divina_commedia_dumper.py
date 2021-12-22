@@ -80,16 +80,11 @@ def get_all_links(link_libro):
 db = DbManager(Path("divinacommedia.db"))
 
 
-# num_libro
-# nome_libro
-# num_rom_canto, num_canto
-# num_verso
-# verso
-# num_terzina
+
 db.write_on_db(f"""
 CREATE TABLE IF NOT EXISTS divina_commedia (
-	num_libro INTEGER, nome_libro TEXT, num_rom_canto TEXT, num_canto INTEGER, num_verso INTEGER, verso TEXT, num_terzina INTEGER,
-	PRIMARY KEY (num_libro, num_canto, num_verso)
+	num_cantica INTEGER, num_canto INTEGER, num_verso INTEGER, nome_cantica TEXT, num_rom_canto TEXT, verso TEXT, num_terzina INTEGER,
+	PRIMARY KEY (num_cantica, num_canto, num_verso)
 );""")
 
 
@@ -101,23 +96,24 @@ link_libri = [
 ]
 
 
-for j, (nome_libro, link_libro) in enumerate(link_libri):
+for j, (nome_cantica, link_libro) in enumerate(link_libri):
 	for i, a in enumerate(get_all_links(link_libro)):
 		link_canto = "https://it.wikisource.org" + a["href"]
 
 		for nv, versi in get_versi_canto(link_canto):
 			print(
-				j+1, nome_libro,
+				j+1, nome_cantica,
 				link_canto.split("_")[-1], i+1,
 				nv, versi, int(nv//3.01+1 )
 			)
 
 			db.write_on_db(f"""
-				INSERT INTO divina_commedia (num_libro, nome_libro, num_rom_canto, num_canto, num_verso, verso, num_terzina) VALUES (?, ?, ?, ?, ?, ?, ?);""",
+				INSERT INTO divina_commedia (num_cantica, num_canto, num_verso, nome_cantica, num_rom_canto, verso, num_terzina) VALUES (?, ?, ?, ?, ?, ?, ?);""",
 				(
-					j+1, nome_libro,
-					link_canto.split("_")[-1], i+1,
-					nv, versi, int(nv//3.01+1 )
+					j+1, i+1, nv,
+					nome_cantica,
+					link_canto.split("_")[-1],
+					versi, int(nv//3.01+1 )
 				)
 				)
 
