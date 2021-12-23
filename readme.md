@@ -28,7 +28,7 @@ Every `num_cantica`, `num_canto`, `num_verso` has a corresponding `TEXT` version
 - `nome_canto`, corresponds to *I* if `num_cantica = 1`, to *X* if `num_cantica = 10`, to *XXXIV* if `num_cantica = 34` (it's based on [how romans counted](https://en.wikipedia.org/wiki/Roman_numerals)) 
 - `verso` is what actually Dante wrote. *Technically, how Giorgio Petrocchi (Firenze, 1994) wrote. Which is kind of the official version.*
 
-I also added `num_terzina`, which is usefull to get *vers* grouped by 3... it's just a function of `num_verso`.
+I also added `num_terzina`, which is usefull to get *versi* grouped by 3... it's just a function of `num_verso`.
 
 
 ## Query Examples
@@ -55,7 +55,7 @@ where dc.num_cantica = ut.num_cantica AND dc.num_canto = ut.canto AND dc.num_ter
 Also take a moment to notice that every *cantica* ends in 'stelle' (🌟🌟) !!!
 
 
-#### How to get the number of *versi* for every *canto*
+#### How to get the longest *canto* for every *cantica*
 
 ```sql
 SELECT nome_cantica, num_rom_canto, max(num_verso)
@@ -63,8 +63,23 @@ FROM divina_commedia
 GROUP BY num_canto
 ```
 
-| nome_cantica |  num_rom_canto | num_terzina |                 verso              |
-|:----------:|:---------:|:-----------:|:-----------------------------------------:|
-|   Inferno  |   XXXIV   |      47     |   E quindi uscimmo a riveder le stelle.   |
-| Purgatorio |  XXXIII   |      49     |   puro e disposto a salire a le stelle.   |
-|  Paradiso  |  XXXIII   |      49     | l’amor che move il sole e l’altre stelle. |
+| nome_cantica | num_rom_canto | max(num_verso)|
+|:----------:|:----------:|:------------:|
+|   Inferno  |   XXXIII   |      157     |
+| Purgatorio |    XXXII   |      160     |
+|  Paradiso  |     XVI    |      154     | 
+
+
+#### How to get number of *versi* in every *canto*
+
+```sql
+SELECT nome_cantica, num_canto, max(num_verso)
+FROM divina_commedia
+GROUP BY num_canto, num_cantica
+```
+
+| nome_cantica |  num_canto | max(num_verso) |       
+|:----------:|:---------:|:-----------:|
+|   Inferno  |   1   |      136     |  
+| inferno |  2   |      142     |
+|  ...  |  ...   |      ...     |
